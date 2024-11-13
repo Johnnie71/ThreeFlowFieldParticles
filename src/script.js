@@ -101,6 +101,21 @@ const baseParticlesTexure = gpgpu.computation.createTexture()
 
 // Particles Variable
 gpgpu.particlesVariable = gpgpu.computation.addVariable('uParticles', gpgpuParticleShader, baseParticlesTexure)
+gpgpu.computation.setVariableDependencies(gpgpu.particlesVariable, [ gpgpu.particlesVariable ])
+
+
+// Init
+gpgpu.computation.init()
+
+// Debug
+gpgpu.debug = new THREE.Mesh(
+    new THREE.PlaneGeometry(3,3),
+    new THREE.MeshBasicMaterial({
+        map: gpgpu.computation.getCurrentRenderTarget(gpgpu.particlesVariable).texture
+    })
+)
+gpgpu.debug.position.x = 3
+scene.add(gpgpu.debug)
 
 /**
  * Particles
@@ -142,6 +157,9 @@ const tick = () =>
     
     // Update controls
     controls.update()
+
+    // GPGPU Update
+    gpgpu.computation.compute()
 
     // Render normal scene
     renderer.render(scene, camera)
