@@ -4,7 +4,7 @@ uniform float uSize;
 varying vec3 vColor;
 
 void main()
-{
+{ 
     // Final position
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;

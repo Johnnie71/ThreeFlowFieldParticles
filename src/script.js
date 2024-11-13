@@ -18,7 +18,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
-
+ 
 // Loaders
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('/draco/')
