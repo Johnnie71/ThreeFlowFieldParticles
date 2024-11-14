@@ -156,6 +156,7 @@ for(let y = 0; y < gpgpu.size; y++){
 particles.geometry = new THREE.BufferGeometry()
 particles.geometry.setDrawRange(0, baseGeometry.count)
 particles.geometry.setAttribute('aParticlesUv', new THREE.BufferAttribute(particlesUvArray, 2))
+particles.geometry.setAttribute('aColor', baseGeometry.instance.attributes.color)
 
 // Material
 particles.material = new THREE.ShaderMaterial({
