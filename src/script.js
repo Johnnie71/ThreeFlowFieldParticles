@@ -111,7 +111,7 @@ for(let i = 0; i < baseGeometry.count; i++) {
     baseParticlesTexure.image.data[i4 + 0] = baseGeometry.instance.attributes.position.array[i3 + 0]
     baseParticlesTexure.image.data[i4 + 1] = baseGeometry.instance.attributes.position.array[i3 + 1]
     baseParticlesTexure.image.data[i4 + 2] = baseGeometry.instance.attributes.position.array[i3 + 2]
-    baseParticlesTexure.image.data[i4 + 3] = 0
+    baseParticlesTexure.image.data[i4 + 3] = Math.random()
 }
 
 // Particles Variable
@@ -120,7 +120,9 @@ gpgpu.computation.setVariableDependencies(gpgpu.particlesVariable, [ gpgpu.parti
 
 // Uniforms
 gpgpu.particlesVariable.material.uniforms.uTime = new THREE.Uniform(0)
-
+gpgpu.particlesVariable.material.uniforms.uDeltaTime = new THREE.Uniform(0)
+gpgpu.particlesVariable.material.uniforms.uBase = new THREE.Uniform(baseParticlesTexure)
+gpgpu.particlesVariable.material.uniforms.uFlowfieldInfluence = new THREE.Uniform(0.5)
 // Init
 gpgpu.computation.init()
 
@@ -186,6 +188,7 @@ scene.add(particles.points)
  */
 gui.addColor(debugObject, 'clearColor').onChange(() => { renderer.setClearColor(debugObject.clearColor) })
 gui.add(particles.material.uniforms.uSize, 'value').min(0).max(1).step(0.001).name('uSize')
+gui.add(gpgpu.particlesVariable.material.uniforms.uFlowfieldInfluence, 'value').min(0).max(1).name('uFlowFieldInfluence')
 
 /**
  * Animate
@@ -204,6 +207,7 @@ const tick = () =>
 
     // GPGPU Update
     gpgpu.particlesVariable.material.uniforms.uTime.value = elapsedTime
+    gpgpu.particlesVariable.material.uniforms.uDeltaTime.value = deltaTime
     gpgpu.computation.compute()
     particles.material.uniforms.uParticlesTexture.value = gpgpu.computation.getCurrentRenderTarget(gpgpu.particlesVariable).texture
 
